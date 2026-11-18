@@ -515,6 +515,26 @@ p{margin:0}
 .areahero .big{position:absolute;right:18px;top:16px;opacity:.28}
 .areahero p{color:rgba(244,245,236,.8);font-size:13.5px}
 
+
+/* Extras */
+.xpick{display:grid;gap:10px}
+.xcard{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:12px;width:100%;padding:8px 14px 8px 8px;border-radius:20px;background:var(--surface);border:1.5px solid var(--line);text-align:left;transition:border-color .3s ease,background .3s ease,box-shadow .3s ease}
+.xcard .xph{width:58px;height:58px;border-radius:15px;overflow:hidden;display:grid;place-items:center;transition:transform .35s cubic-bezier(.22,.9,.24,1)}
+.xcard .xic{background:linear-gradient(150deg,var(--accent-soft),var(--surface-2));color:var(--accent)}
+.xcard .xt{display:grid;gap:3px;min-width:0}
+.xcard .xt b{font-size:15px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xcard .xt span{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;color:var(--muted);font-weight:600}
+.xcard .xr{display:grid;justify-items:end;gap:6px}
+.xcard .xpr{font-weight:800;font-size:14px;color:var(--accent-2);white-space:nowrap}
+.xcard .xck{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);color:transparent;transition:background .3s ease,border-color .3s ease,color .3s ease,transform .3s cubic-bezier(.22,.9,.24,1)}
+.xcard[aria-pressed="true"]{border-color:var(--accent);background:linear-gradient(120deg,var(--accent-soft),var(--surface) 70%);box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 16%,transparent)}
+.xcard[aria-pressed="true"] .xck{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.xcard.pop .xck{animation:xpop .42s cubic-bezier(.22,.9,.24,1)}
+.xcard.pop .xph{animation:xph .42s cubic-bezier(.22,.9,.24,1)}
+@keyframes xpop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes xph{0%{transform:scale(1)}50%{transform:scale(.94)}100%{transform:scale(1)}}
+@media (min-width:960px){.xpick{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){.xcard.pop .xck,.xcard.pop .xph{animation:none}}
 /* ===== Computadora ===== */
 @media (min-width:960px){
   body{font-size:16px}
@@ -1460,6 +1480,16 @@ function vList(){
   <div class="plancard feat" style="flex:none"><div class="row"><b class="t4" style="font-weight:800">${ico("crown",16)} ¿Venís seguido?</b></div><p class="sm muted">Con el ${esc(BR().club)} te ahorrás hasta ${money(Math.max(...db.plans.map(planSave)))} por mes y no pagás seña.</p><button class="btn brass" data-go="club">Conocer el ${esc(BR().club)}</button></div>`;
 }
 
+const xIcon = n => /ceja/i.test(n) ? "brow" : /barba/i.test(n) ? "beard" : /corte|pelo/i.test(n) ? "scissors" : /facial|piel|masaje/i.test(n) ? "spa" : "star";
+let xPop = null;
+function xCard(e){
+  const on = bk.extras.includes(e.id);
+  const s = db.services.find(x => x.id===String(e.id).replace(/-x$/,"") || String(x.name).toLowerCase()===String(e.name).toLowerCase());
+  const pic = s && (s.photo || photoOf(s.id) || PICS.includes(s.id)) ? svcPh(s,"xph") : `<span class="xph xic">${ico(xIcon(e.name),22,1.7)}</span>`;
+  return `<button class="xcard ${xPop===e.id?"pop":""}" data-ext="${e.id}" aria-pressed="${on}">${pic}
+    <span class="xt"><b>${esc(e.name)}</b><span>${e.dur?`${ico("clock",12)} +${e.dur} min`:"Sin tiempo extra"}</span></span>
+    <span class="xr"><span class="xpr">+${money(e.price)}</span><span class="xck">${ico("check",13,3)}</span></span></button>`;
+}
 function vAgenda(){
   const s = svc(bk.serviceId);
   const socio = hasPrio(me || bk.phone);
@@ -1483,7 +1513,7 @@ function vAgenda(){
   return `
   <div class="sel">${svcPh(s)}<div><b class="t4" style="font-weight:800">${esc(s.name)}</b><p class="sm muted">${ico("clock",12)} ${s.dur} min · ${esc(barber(bk.barberId)?.name||"Con quien esté libre")}</p>${stars(s.rating)}</div>
     <div style="display:grid;justify-items:end;gap:6px"><span class="price t4">${money(s.price)}</span><button class="link sm" data-go="book">Cambiar</button></div></div>
-  ${db.extras.some(e=>!e.off)?`<div class="stack" style="gap:8px"><p class="lbl">Sumale</p><div class="chips">${db.extras.filter(e=>!e.off && !(bk.serviceId==="cejas"&&e.id==="cejas-x")).map(e=>`<button class="chip" data-ext="${e.id}" aria-pressed="${bk.extras.includes(e.id)}">${bk.extras.includes(e.id)?ico("check",14,2.6):ico("plus",14,2.2)} ${esc(e.name)} · +${money(e.price)}</button>`).join("")}</div></div>`:""}
+  ${db.extras.some(e=>!e.off)?`<div class="stack" style="gap:10px"><div><p class="lbl">Completá tu turno</p><p class="xs muted" style="margin-top:2px">Sumalo en el mismo turno</p></div><div class="xpick">${db.extras.filter(e=>!e.off && !(bk.serviceId==="cejas"&&e.id==="cejas-x")).map(xCard).join("")}</div></div>`:""}
   ${staffFor(bk.serviceId).length>1?`<div class="stack" style="gap:8px"><p class="lbl">¿Con quién?</p><div class="bpick">
     <button data-bar="any" aria-pressed="${bk.barberId==="any"}"><span class="anyic">${ico("users",24)}</span><b>Cualquiera</b><span class="xs muted">El primero libre</span></button>
     ${staffFor(bk.serviceId).map(b=>`<button data-bar="${b.id}" aria-pressed="${bk.barberId===b.id}" ${bk.date&&!worksOn(b,bk.date)?'title="No atiende ese día"':""}>${barberPh(b)}<b>${esc(String(b.name||proName()).split(" ")[0])}</b><span class="xs muted">${bk.date&&!worksOn(b,bk.date)?"No atiende ese día":esc(String(b.role||proName()).split("·")[0].trim())}</span></button>`).join("")}</div></div>`:""}
@@ -2434,7 +2464,7 @@ document.addEventListener("click", e => {
     if (bstep==="pay" || (bstep==="review" && depositDue()===0)){ confirmBooking(); return; }
     bstep = bstep==="agenda" ? "review" : "pay"; render(); window.scrollTo({top:0}); return; }
   if (d.cal){ calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+Number(d.cal), 1); render(); return; }
-  if (d.ext){ bk.extras = bk.extras.includes(d.ext) ? bk.extras.filter(x=>x!==d.ext) : [...bk.extras,d.ext]; bk.start=null; render(); return; }
+  if (d.ext){ xPop = d.ext; setTimeout(()=>{ xPop = null; }, 0); bk.extras = bk.extras.includes(d.ext) ? bk.extras.filter(x=>x!==d.ext) : [...bk.extras,d.ext]; bk.start=null; render(); return; }
   if (d.pslot){ const [dt,t]=d.pslot.split("|"); bk.date=dt; bk.start=Number(t); render(); return; }
   if (d.view){ calView=d.view; render(); return; }
   if (d.jump){ const sw=$(".swipe"); if (sw) scrollToCol(sw, d.jump, true); return; }
