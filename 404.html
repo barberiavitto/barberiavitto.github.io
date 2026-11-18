@@ -586,6 +586,9 @@ p{margin:0}
 .rw.done b{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
 .rw.done .rw-st{color:var(--ok)}
 /* Planes del Club: plata, dorado y black */
+.planrow .plancard{display:flex;flex-direction:column;gap:10px}
+.planrow .plancard > .btn:last-child{margin-top:auto}
+.planrow .plancard .perks{margin-bottom:6px}
 .plancard.tier-silver,.plancard.tier-gold,.plancard.tier-black{position:relative;overflow:hidden;border-width:1px}
 .plancard.tier-silver::before,.plancard.tier-gold::before,.plancard.tier-black::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px);pointer-events:none}
 .plancard.tier-silver > *,.plancard.tier-gold > *,.plancard.tier-black > *{position:relative}
