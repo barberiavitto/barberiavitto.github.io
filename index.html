@@ -541,6 +541,68 @@ p{margin:0}
 .work.iglink:active .ph{transform:scale(.97)}
 @media (hover:hover){.work.iglink:hover .ph{transform:scale(1.02);filter:brightness(1.05)}}
 .work .igbadge{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(20,22,12,.45);color:#fff;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+
+/* Tarjeta de fidelidad premium (negro y dorado) */
+.vcard2{position:relative;width:100%;max-width:440px;aspect-ratio:1.586;border-radius:20px;padding:18px 20px 16px;overflow:hidden;color:#E6CF95;
+  display:grid;grid-template-rows:auto 1fr auto auto;gap:6px;
+  background:radial-gradient(130% 90% at 0% 0%,rgba(230,207,149,.13),transparent 55%),repeating-linear-gradient(180deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px),linear-gradient(155deg,#25261F,#111209 72%);
+  box-shadow:0 20px 44px rgba(10,11,6,.38),inset 0 0 0 1px rgba(217,191,132,.28)}
+.vcard2::after{content:"";position:absolute;inset:-40% -10%;background:linear-gradient(115deg,transparent 38%,rgba(255,240,200,.07) 48%,transparent 58%);pointer-events:none}
+.vcard2::before{content:"";position:absolute;inset:7px;border-radius:15px;border:1px solid rgba(217,191,132,.14);pointer-events:none}
+.vcard2 > *{position:relative}
+.vc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.vc-brand{display:grid;gap:4px}
+.vc-brand .vc-wm{filter:sepia(.5) saturate(1.4) brightness(1.02)}
+.vc-brand .wtext{color:#E6CF95;font-weight:800;letter-spacing:.02em}
+.vc-brand span{font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(230,207,149,.62)}
+.vc-count{font-family:Georgia,"Times New Roman",serif;color:#E6CF95;line-height:1}
+.vc-count b{font-size:24px;font-weight:400} .vc-count span{font-size:13px;opacity:.6}
+.vc-seals{display:grid;gap:8px 9px;align-content:center;justify-items:center}
+.vc-s{width:100%;max-width:34px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:1.2px solid rgba(217,191,132,.6);font-family:Georgia,"Times New Roman",serif;font-size:11.5px;color:rgba(230,207,149,.85)}
+.vc-s.t{box-shadow:0 0 0 2.5px #16170F,0 0 0 3.6px rgba(217,191,132,.55);color:#E6CF95}
+.vc-s.on{border-color:transparent;background:linear-gradient(145deg,#F4E3B4,#D2B06A 55%,#A07F3E);color:#1A1A12;font-family:var(--f);font-weight:800;font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 6px rgba(0,0,0,.35)}
+.vc-s.on.t{box-shadow:0 0 0 2.5px #16170F,0 0 0 3.6px #D2B06A,0 2px 6px rgba(0,0,0,.35)}
+.vc-stars{text-align:center;font-size:8px;letter-spacing:.5em;color:rgba(230,207,149,.5)}
+.vc-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;border-top:1px solid rgba(217,191,132,.18);padding-top:8px}
+.vc-k{font-size:8.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(230,207,149,.55)}
+.vc-n{font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#EEDDB0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+/* Recompensas, debajo de la tarjeta */
+.vrw{display:grid;gap:12px;max-width:440px;width:100%}
+.vrw-bar{position:relative;height:4px;border-radius:9px;background:var(--line);margin:10px 11px 12px}
+.vrw-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#C9A55A,#E6CF95)}
+.vrw-bar span{position:absolute;top:50%;width:22px;height:22px;transform:translate(-50%,-50%);border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1.5px solid var(--line);color:var(--muted)}
+.vrw-bar span.on{background:linear-gradient(145deg,#F4E3B4,#C9A55A);border-color:transparent;color:#1A1A12}
+.vrw-list{display:grid;gap:8px}
+.rw{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:10px 14px 10px 10px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.rw-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted)}
+.rw-tx{min-width:0}
+.rw-tx p{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rw-tx b{display:block;font-size:14.5px;font-weight:800;line-height:1.25}
+.rw-st{font-size:11.5px;font-weight:700;color:var(--muted);white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.rw.ready{border-color:#C9A55A;background:linear-gradient(120deg,color-mix(in srgb,#E6CF95 22%,var(--surface)),var(--surface) 70%)}
+.rw.ready .rw-ic{background:linear-gradient(145deg,#F4E3B4,#C9A55A);color:#1A1A12;box-shadow:0 6px 14px rgba(160,127,62,.3)}
+.rw.ready .rw-st{color:#A07F3E}
+.rw.done .rw-ic{background:#1A1B13;color:#E6CF95}
+.rw.done b{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.rw.done .rw-st{color:var(--ok)}
+/* Planes del Club: plata, dorado y black */
+.plancard.tier-silver,.plancard.tier-gold,.plancard.tier-black{position:relative;overflow:hidden;border-width:1px}
+.plancard.tier-silver::before,.plancard.tier-gold::before,.plancard.tier-black::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px);pointer-events:none}
+.plancard.tier-silver > *,.plancard.tier-gold > *,.plancard.tier-black > *{position:relative}
+.plancard.tier-silver{background:linear-gradient(125deg,#F7F8F5 0%,#D7DAD3 32%,#F1F2EE 52%,#C3C7BF 78%,#E6E8E3 100%);border-color:#BFC3BA;color:#24261F}
+.plancard.tier-gold{background:linear-gradient(120deg,#F5E6B8 0%,#D9BB76 28%,#F7EBC6 48%,#C8A456 72%,#E9D49E 100%);border-color:#B8954C;color:#2A2210;box-shadow:0 14px 32px rgba(160,127,62,.28)}
+.plancard.tier-black{background:linear-gradient(155deg,#25261F,#0F100A 75%);border-color:rgba(217,191,132,.45);color:#EEDDB0;box-shadow:0 14px 32px rgba(10,11,6,.35)}
+.plancard.tier-silver .muted{color:#5B5E55} .plancard.tier-gold .muted{color:#5E4C22} .plancard.tier-black .muted{color:rgba(230,207,149,.6)}
+.plancard.tier-silver .perks li svg{color:#3F433A} .plancard.tier-gold .perks li svg{color:#4A3A12} .plancard.tier-black .perks li svg{color:#D9BF84}
+.plancard.tier-silver .perks li.no,.plancard.tier-gold .perks li.no{color:inherit;opacity:.55} .plancard.tier-black .perks li.no{color:rgba(230,207,149,.45)}
+.plancard.tier-silver .save{color:#2F5A2B} .plancard.tier-gold .save{color:#3A3A10} .plancard.tier-black .save{color:#D9BF84}
+.plancard.tier-black .amt{background:linear-gradient(90deg,#F4E3B4,#C9A55A);-webkit-background-clip:text;background-clip:text;color:transparent}
+.plancard .tbadge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.plancard.tier-gold .tbadge{background:#1A1A12;color:#E6CF95}
+.plancard.tier-black .tbadge{background:linear-gradient(145deg,#F4E3B4,#C9A55A);color:#1A1A12}
+.plancard.tier-silver .tbtn{background:#24261F;color:#F1F2EE}
+.plancard.tier-gold .tbtn{background:#1A1A12;color:#E6CF95}
+.plancard.tier-black .tbtn{background:linear-gradient(145deg,#F4E3B4,#C9A55A);color:#1A1A12}
 /* ===== Computadora ===== */
 @media (min-width:960px){
   body{font-size:16px}
@@ -1186,18 +1248,31 @@ function toast(t){ const el=$("#toast"); el.textContent=t; el.hidden=false; clea
 async function copy(text){ try { await navigator.clipboard.writeText(text); toast("Copiado"); } catch(e){ toast("Mantené apretado el texto para copiarlo"); } }
 function go(s){ screen=s; pending=null; sheet=null; if (s==="ajustes") admin.set=null; if (s==="book"){ bstep="list"; done=null; } render(); window.scrollTo({top:0}); }
 
+const TIER_ICONS = ["brow","star","crown","scissors","beard","award","cup","spa","tag"];
+const tierIcon = (t, i) => t.icon || ["brow","star","crown"][i] || "award";
 function vcard(c){
-  const T = tiers(), M = cardMax(); const n = c ? Math.min(Number(c.sellos)||0, M) : 0; const cl = claimedOf(c);
-  const ready = T.filter(t=>n>=t.at && !cl.includes(t.id)).length; const lvl = c ? levelIdx(c.total) : -1;
+  const T = tiers(), M = cardMax(); const n = c ? Math.min(Number(c.sellos)||0, M) : 0; const lvl = c ? levelIdx(c.total) : -1;
   const L = esc((String(BR().name||"V").trim()[0]||"V").toUpperCase());
-  return `<div class="vcard">
-    <div class="row" style="align-items:flex-start"><div class="mark">${wordmark(30)}<small>Tarjeta de fidelidad</small></div><span class="badge glass">${ready?ico("award",13)+` ${ready===1?"1 beneficio listo":ready+" beneficios listos"}`:`${n} / ${M} cortes`}</span></div>
-    <div class="seals">${[...Array(M)].map((_,i)=>{ const pos = i+1, on = i < n, ti = T.findIndex(t=>Number(t.at)===pos);
-      return `<div class="seal ${on?"on":""} ${ti>=0?"tier":""}" title="${ti>=0?esc(T[ti].name+" · "+T[ti].reward):"Corte "+pos}">${on ? (ti>=0?ico("award",16,2):L) : (ti>=0?ROM[ti]:String(pos).padStart(2,"0"))}</div>`;}).join("")}</div>
-    <div class="vtrack"><i style="width:${n/M*100}%"></i>${T.map(t=>`<span class="${n>=t.at?"on":""}" style="left:calc(${t.at/M*100}% - ${Number(t.at)===M?7:0}px)"></span>`).join("")}</div>
-    <div class="unl">${T.map((t,i)=>{ const st = cl.includes(t.id) ? "done" : n>=t.at ? "ready" : "lock";
-      return `<div class="u ${st}"><span class="ic">${st==="done"?ico("check",16,2.6):st==="ready"?ico("award",17,2):ico("lock",15)}</span><div style="min-width:0"><b>${ROM[i]} · ${esc(t.name)} <span style="font-weight:600;opacity:.6">· ${t.at} cortes</span></b><p>${esc(t.reward)}</p></div><span class="st">${st==="done"?"Canjeado":st==="ready"?"¡Listo!":"Faltan "+(t.at-n)}</span></div>`; }).join("")}</div>
-    <div class="foot"><p class="holder">${c?esc(c.name):"Tu nombre acá"}</p><p class="k">${c?(lvl>=0?"Nivel "+esc(T[lvl].name):"Miembro desde "+fmtMonth(c.since||today())):"Miembro "+esc(BR().name)}</p></div>
+  const cols = M > 8 ? Math.ceil(M/2) : M;
+  return `<div class="vcard2" role="img" aria-label="${esc(BR().card)}: ${n} de ${M} cortes">
+    <div class="vc-top"><div class="vc-brand">${wordmark(24,"vc-wm")}<span>Tarjeta de fidelidad</span></div>
+      <div class="vc-count"><b>${n}</b><span>/${M}</span></div></div>
+    <div class="vc-seals" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${[...Array(M)].map((_,i)=>{ const pos = i+1, on = i < n, ti = T.findIndex(t=>Number(t.at)===pos);
+      return `<span class="vc-s ${on?"on":""} ${ti>=0?"t":""}" title="${ti>=0?esc(T[ti].name+" · "+T[ti].reward):"Corte "+pos}">${ti>=0?ico(tierIcon(T[ti],ti),15,1.7):(on?L:pos)}</span>`; }).join("")}</div>
+    <div class="vc-stars">★ ★ ★ ★ ★</div>
+    <div class="vc-foot"><div><p class="vc-k">Socio</p><p class="vc-n">${c?esc(c.name):"Tu nombre"}</p></div>
+      <div style="text-align:right"><p class="vc-k">${lvl>=0?"Nivel":"Miembro desde"}</p><p class="vc-n">${lvl>=0?esc(T[lvl].name):(c?fmtMonth(c.since||today()):esc(BR().name))}</p></div></div>
+  </div>`;
+}
+function vrewards(c){
+  const T = tiers(), M = cardMax(); const n = c ? Math.min(Number(c.sellos)||0, M) : 0; const cl = claimedOf(c);
+  return `<div class="vrw">
+    <div class="row"><p class="lbl">Tus recompensas</p><span class="xs muted">${n} de ${M} cortes</span></div>
+    <div class="vrw-bar"><i style="width:${n/M*100}%"></i>${T.map((t,i)=>`<span class="${n>=t.at?"on":""}" style="left:${t.at/M*100}%">${ico(tierIcon(t,i),11,2)}</span>`).join("")}</div>
+    <div class="vrw-list">${T.map((t,i)=>{ const st = cl.includes(t.id) ? "done" : n>=t.at ? "ready" : "lock";
+      return `<div class="rw ${st}"><span class="rw-ic">${ico(tierIcon(t,i),20,1.7)}</span>
+        <div class="rw-tx"><p>${ROM[i]} · ${esc(t.name)} · corte ${t.at}</p><b>${esc(t.reward)}</b></div>
+        <span class="rw-st">${st==="done"?ico("check",12,3)+" Canjeado":st==="ready"?"Listo para canjear":"Faltan "+(t.at-n)}</span></div>`; }).join("")}</div>
   </div>`;
 }
 const hasPrio = p => { const c = client(p); return planActive(c) && !!plan(c.plan.id)?.prio; };
@@ -1226,14 +1301,15 @@ function clubEntry(c){
 }
 function planCard(p, i, c){
   const ah = planSave(p); const base = (svc(p.serviceId)?.price||0)*p.cuts;
-  return `<div class="plancard ${i===1?"feat":""}">
-    <div class="row"><b class="t4" style="font-weight:800">${esc(p.name)}</b>${i===1?`<span class="badge brass">${ico("crown",12)} Más elegido</span>`:""}</div>
+  const tier = ["silver","gold","black"][Math.min(i,2)];
+  return `<div class="plancard tier-${tier} ${i===1?"feat":""}">
+    <div class="row"><b class="t4" style="font-weight:800">${esc(p.name)}</b>${i===1?`<span class="tbadge">${ico("crown",12)} Más elegido</span>`:i>=2?`<span class="tbadge">${ico("star",12)} Black</span>`:""}</div>
     <div><span class="amt">${money(p.price)}</span><span class="muted"> / 30 días</span></div>
     <p class="sm muted">${p.cuts} × ${esc(svc(p.serviceId)?.name)} · suelto ${money(base)}</p>
     ${ah>0?`<p class="save">Ahorrás ${money(ah)} por mes</p>`:""}
     <ul class="perks">${planPerks(p).map(([ok,t])=>`<li class="${ok?"":"no"}">${ico(ok?"check":"x",15,2.4)}<span>${t}</span></li>`).join("")}</ul>
-    ${db.cfg.mpOn ? `<button class="btn ${i===1?"brass":""} block" data-mpplan="${p.id}">${ico("card",16)} Suscribirme · Mercado Pago</button>`
-      : `<a class="btn ${i===1?"brass":""} block" target="_blank" rel="noopener" href="${waLink(db.cfg.whatsapp,planMsg(p,c))}">Suscribirme</a>`}
+    ${db.cfg.mpOn ? `<button class="btn tbtn block" data-mpplan="${p.id}">${ico("card",16)} Suscribirme · Mercado Pago</button>`
+      : `<a class="btn tbtn block" target="_blank" rel="noopener" href="${waLink(db.cfg.whatsapp,planMsg(p,c))}">Suscribirme</a>`}
   </div>`;
 }
 
@@ -1378,7 +1454,7 @@ function vHome(){
         ${D.bio?`<p class="sm">${esc(D.bio)}</p>`:""}
         <button class="pill" style="justify-self:start" data-go="book">Reservar</button></div>
       </div></section>`:""}
-    <section class="stack"><div class="sechead"><h2>${esc(BR().card)}</h2></div>${vcard(c)}
+    <section class="stack"><div class="sechead"><h2>${esc(BR().card)}</h2></div>${vcard(c)}${vrewards(c)}
       ${!c?`<p class="sm muted">Sumá cortes y desbloqueá ${tiers().length} beneficios: ${tiers().map(t=>esc(String(t.reward).toLowerCase())).join(", ")}. <button class="link" data-go="perfil">Creá tu cuenta</button></p>`:""}</section>
   </div>
 
@@ -1770,8 +1846,8 @@ function vClub(){
     <li>${ico("check",15,2.4)}<span><b>Descuento en productos:</b> 5%, 10% o 15% según tu plan.</span></li>
     <li>${ico("check",15,2.4)}<span><b>Locales aliados</b> (Club 4 y Club 4 + Barba): descuentos exclusivos en comercios de la zona. Próximamente.</span></li>
     <li class="no">${ico("x",15,2.4)}<span>Los cortes no son acumulables.</span></li></ul></div>
-  <div class="twocol stack" style="gap:20px">${vcard(c)}
-    <div class="stack"><h2 class="hl t3">${emLast(BR().card)}</h2><p class="muted">Cada visita completada suma un sello. Al llegar a ${db.cfg.sellosMeta}, te espera una cortesía de la casa: ${esc(db.cfg.premio.toLowerCase())}. Los cortes del plan también suman.</p></div></div>`;
+  <div class="twocol stack" style="gap:20px"><div class="stack" style="gap:14px">${vcard(c)}${vrewards(c)}</div>
+    <div class="stack"><h2 class="hl t3">${emLast(BR().card)}</h2><p class="muted">Cada corte completado suma un sello. Al llegar a cada ícono de la tarjeta desbloqueás una recompensa, y los cortes del plan también suman.</p></div></div>`;
 }
 
 /* ===== Turnos ===== */
@@ -1848,7 +1924,7 @@ function vPerfil(){
       <div class="stat"><b>${Math.min(c.sellos,meta)}/${meta}</b><span class="xs muted">Tarjeta</span></div>
       <div class="stat"><b>${money(c.saldo||0)}</b><span class="xs muted">A favor</span></div>
     </div>
-    ${vcard(c)}
+    ${vcard(c)}${vrewards(c)}
   </div>
   <div class="stack" style="gap:16px">
     ${planActive(c)?`<div class="socio"><div class="row"><b>${ico("crown",15)} ${esc(plan(c.plan.id)?.name)}</b><span class="xs" style="font-weight:700">Vence ${fmtShort(c.plan.end)}</span></div><p class="sm muted">${c.plan.left} cortes disponibles · ${daysBetween(today(),c.plan.end)} días restantes · ${plan(c.plan.id)?.prod||0}% en productos</p></div>`
@@ -2144,10 +2220,11 @@ function sClub(){
     ${clubFeatsRaw().map((t,k)=>`<div class="row" style="gap:8px"><input class="mini" style="flex:1" data-feat="${k}" value="${esc(t)}" aria-label="Destacado"><button class="link mutedlink" data-featdel="${k}" aria-label="Quitar">${ico("x",15,2.2)}</button></div>`).join("")}
     <button class="btn soft sm" style="justify-self:start" data-featadd>${ico("plus",14)} Agregar destacado</button></div>
   <div class="card"><p class="lbl">${esc(b.card)}</p>
-    ${vcard({ name:"Juan Pérez", sellos:Math.min(cardMax(), (tiers()[1]?.at||5)+1), total:(tiers()[1]?.at||5)+1, prefs:{claimed:[tiers()[0]?.id]}, since:today() })}
+    ${vcard({ name:"Juan Pérez", sellos:Math.min(cardMax(), (tiers()[1]?.at||5)+1), total:(tiers()[1]?.at||5)+1, prefs:{claimed:[tiers()[0]?.id]}, since:today() })}${vrewards({ sellos:Math.min(cardMax(), (tiers()[1]?.at||5)+1), prefs:{claimed:[tiers()[0]?.id]} })}
     <p class="sm muted">Cada corte completado suma un sello. La tarjeta se desbloquea por niveles; al entregar todos los beneficios arranca una nueva. El nivel queda como distintivo del cliente.</p>
     ${tiers().map((t,i)=>`<div class="sedit"><div class="row" style="gap:10px"><span class="badge brass">${ROM[i]}</span><input class="ttl" style="flex:1" data-edit="tiers.${t.id}.name" value="${esc(t.name)}" aria-label="Nombre del nivel"></div>
       <div class="sedit-row"><span class="xs muted">Cortes para desbloquear</span>${numStep(`tiers.${t.id}.at`, t.at, 1, 1, 30)}</div>
+      <div class="stack" style="gap:6px"><span class="xs muted">Ícono en la tarjeta</span><div class="chips">${TIER_ICONS.map(ic=>`<button class="chip sm" data-setv="tiers.${t.id}.icon|${ic}" aria-pressed="${tierIcon(t,i)===ic}">${ico(ic,15)}</button>`).join("")}</div></div>
       ${fieldIn(`tiers.${t.id}.reward`,"Beneficio",t.reward,"Ej: perfilado de cejas, cera premium, un corte de la casa")}</div>`).join("")}
     ${toggle("cfg.agendaPublica", db.cfg.agendaPublica!==false, "Clientes visibles en la agenda", "Al reservar ven nombre, inicial y distintivos de los demás. Cada cliente puede ocultarse.")}
   </div>`;
