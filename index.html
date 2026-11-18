@@ -889,6 +889,9 @@ const I = {
   cup:'<path d="M4 9h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17M8 2.5c-.8 1 .8 2-.1 3.2M12 2.5c-.8 1 .8 2-.1 3.2"/>',
   grid:'<rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/>',
   cols:'<rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><path d="M17 4h2.5a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5H17"/>',
+  sparkle:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/>',
+  jar:'<rect x="5" y="9" width="14" height="11" rx="2.5"/><rect x="6.5" y="5" width="11" height="4" rx="1"/><path d="M9 14h6"/>',
+  gift:'<rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7.5h18V10H3zM12 7.5V20"/><path d="M12 7.5C10.5 4.5 7 4 7 6s3 1.5 5 1.5c2 0 5 .5 5-1.5s-3.5-1.5-5 1.5z"/>',
   moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'
 };
 const ico = (n,s=20,w=1.8) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
@@ -1251,8 +1254,8 @@ function toast(t){ const el=$("#toast"); el.textContent=t; el.hidden=false; clea
 async function copy(text){ try { await navigator.clipboard.writeText(text); toast("Copiado"); } catch(e){ toast("Mantené apretado el texto para copiarlo"); } }
 function go(s){ screen=s; pending=null; sheet=null; if (s==="ajustes") admin.set=null; if (s==="book"){ bstep="list"; done=null; } render(); window.scrollTo({top:0}); }
 
-const TIER_ICONS = ["brow","star","crown","scissors","beard","award","cup","spa","tag"];
-const tierIcon = (t, i) => t.icon || ["brow","star","crown"][i] || "award";
+const TIER_ICONS = ["sparkle","jar","crown","gift","star","scissors","beard","cup","spa"];
+const tierIcon = (t, i) => (t.icon && t.icon!=="brow" ? t.icon : null) || ["sparkle","jar","crown"][i] || "gift";
 function vcard(c){
   const T = tiers(), M = cardMax(); const n = c ? Math.min(Number(c.sellos)||0, M) : 0; const lvl = c ? levelIdx(c.total) : -1;
   const L = esc((String(BR().name||"V").trim()[0]||"V").toUpperCase());
