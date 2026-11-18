@@ -398,12 +398,21 @@ p{margin:0}
 
 
 /* Áreas del studio */
-.areas{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px;scrollbar-width:none}
+.areas{position:relative;display:flex;gap:0;padding:4px;border-radius:999px;background:var(--surface);border:1px solid var(--line);overflow-x:auto;scrollbar-width:none;isolation:isolate}
+.areas .ind{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:var(--ink);box-shadow:0 6px 16px rgba(20,24,8,.16);z-index:-1;transition:transform .55s cubic-bezier(.22,.9,.24,1),width .55s cubic-bezier(.22,.9,.24,1)}
 .areas::-webkit-scrollbar,.swipe::-webkit-scrollbar,.dpills::-webkit-scrollbar{display:none}
-.area{flex:0 0 auto;scroll-snap-align:start;display:flex;align-items:center;gap:8px;padding:6px 16px 6px 6px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:14.5px;color:var(--muted)}
-.area .ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--accent)}
-.area[aria-current="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.area[aria-current="true"] .ic{background:var(--accent);color:var(--accent-ink)}
+.area{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 9px;border-radius:999px;background:none;border:0;font-weight:700;font-size:13px;letter-spacing:.01em;color:var(--muted);white-space:nowrap;transition:color .45s ease}
+.area .ic{display:grid;place-items:center;opacity:.75;transition:opacity .45s ease,transform .55s cubic-bezier(.22,.9,.24,1)}
+.area[aria-current="true"]{color:var(--bg)}
+.area[aria-current="true"] .ic{opacity:1;transform:scale(1.08)}
+.areas.noanim .ind{transition:none}
+.screen.sw{animation:none}
+.screen.sw > :not(.areas){animation:swIn .5s cubic-bezier(.22,.9,.24,1) both}
+.screen.sw.l > :not(.areas){animation-name:swInL}
+.screen.sw > :nth-child(3){animation-delay:.04s} .screen.sw > :nth-child(4){animation-delay:.08s} .screen.sw > :nth-child(n+5){animation-delay:.12s}
+@keyframes swIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@keyframes swInL{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.areas .ind,.area,.area .ic{transition:none}.screen.sw > *{animation:none!important}}
 .mlist{display:grid}
 .mitem{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
 .mitem:last-child{border-bottom:0}
@@ -945,6 +954,7 @@ const areaOf = s => (s && s.area && areas().some(a=>a.id===s.area)) ? s.area : m
 const barArea = b => (b && b.area && areas().some(a=>a.id===b.area)) ? b.area : mainArea();
 const areaSvcs = (a = area) => svcs().filter(s => !areas().length || areaOf(s)===a);
 const staffFor = sid => { if (!areas().length) return bars(); const a = areaOf(svc(sid)); const l = bars().filter(b=>barArea(b)===a); return l.length ? l : bars(); };
+let areaSwitch = 0, areaInd = null;
 let area = "", calView = "dias", swipeX = {}, jumpTo = null, pub = null;
 
 /* ===== Datos (precios reales; el resto editable desde el panel) ===== */
@@ -1274,7 +1284,7 @@ function vAdminHome(){
 
 /* ===== Inicio ===== */
 const curArea = () => areas().find(a=>a.id===area) || areas()[0];
-const areaTabs = () => areas().length>1 ? `<nav class="areas" aria-label="Áreas del local">${areas().map(a=>`<button class="area" data-area="${a.id}" aria-current="${(area||mainArea())===a.id}"><span class="ic">${ico(a.icon||"star",17)}</span>${esc(a.name)}</button>`).join("")}</nav>` : "";
+const areaTabs = () => areas().length>1 ? `<nav class="areas" aria-label="Áreas del local"><span class="ind" aria-hidden="true"></span>${areas().map(a=>`<button class="area" data-area="${a.id}" aria-current="${(area||mainArea())===a.id}"><span class="ic">${ico(a.icon||"star",16,2)}</span>${esc(a.name)}</button>`).join("")}</nav>` : "";
 function vAreaHome(){
   const a = curArea(); const isMenu = a.kind==="carta"; const list = isMenu ? [] : areaSvcs(a.id); const items = db.menu.filter(m=>m.area===a.id && !m.off);
   return `${areaTabs()}
@@ -1580,7 +1590,16 @@ function scrollToCol(sw, d, smooth){
   sw.scrollTo({left: col.offsetLeft - pad, behavior: smooth ? "smooth" : "auto"});
 }
 function afterRender(){
-  const ar = document.querySelector('.area[aria-current="true"]'); if (ar){ const p = ar.parentElement; if (ar.offsetLeft + ar.offsetWidth > p.clientWidth + p.scrollLeft || ar.offsetLeft < p.scrollLeft) p.scrollLeft = ar.offsetLeft - 8; }
+  const nav = $(".areas"), ar = nav && nav.querySelector('.area[aria-current="true"]'), ind = nav && nav.querySelector(".ind");
+  if (ar && ind){
+    if (ar.offsetLeft + ar.offsetWidth > nav.clientWidth + nav.scrollLeft || ar.offsetLeft < nav.scrollLeft) nav.scrollLeft = ar.offsetLeft - 8;
+    const to = { x: ar.offsetLeft, w: ar.offsetWidth };
+    if (areaSwitch && areaInd){ nav.classList.add("noanim"); ind.style.transform = `translateX(${areaInd.x}px)`; ind.style.width = areaInd.w+"px"; void ind.offsetWidth; nav.classList.remove("noanim"); }
+    else { nav.classList.add("noanim"); requestAnimationFrame(()=>nav.classList.remove("noanim")); }
+    ind.style.transform = `translateX(${to.x}px)`; ind.style.width = to.w+"px"; areaInd = to;
+    if (areaSwitch){ const sc = $("#app .screen"); sc.classList.add("sw"); if (areaSwitch<0) sc.classList.add("l"); }
+  } else areaInd = null;
+  areaSwitch = 0;
   const sw = $(".swipe"); if (!sw) return;
   const key = sw.dataset.swipe;
   if (jumpTo){ scrollToCol(sw, jumpTo, false); jumpTo = null; }
@@ -2421,7 +2440,7 @@ document.addEventListener("click", e => {
   if (d.jump){ const sw=$(".swipe"); if (sw) scrollToCol(sw, d.jump, true); return; }
   if (d.mday){ calView="dias"; jumpTo=d.mday; render(); return; }
   if (d.mcal){ const t0=parseD(today()); const b=calMonth||new Date(t0.getFullYear(),t0.getMonth(),1); calMonth=new Date(b.getFullYear(),b.getMonth()+Number(d.mcal),1); render(); return; }
-  if (d.area){ area=d.area; if (screen==="book" && bstep==="list" && curArea()?.kind==="carta") screen="home"; render(); return; }
+  if (d.area){ if (d.area===(area||mainArea())) return; const ids = areas().map(a=>a.id); areaSwitch = ids.indexOf(d.area) > ids.indexOf(area||mainArea()) ? 1 : -1; area=d.area; if (screen==="book" && bstep==="list" && curArea()?.kind==="carta") screen="home"; render(); return; }
   if (d.bar){ bk.barberId=d.bar; bk.start=null; if (bk.date && d.bar!=="any" && !worksOn(barber(d.bar), bk.date)) bk.date=null; render(); return; }
   if (d.day){ bk.date=d.day; bk.start=null; render(); return; }
   if (d.slot){ bk.start=Number(d.slot); render(); if (innerWidth<960) setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"}),50); return; }
