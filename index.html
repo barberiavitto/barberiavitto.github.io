@@ -535,6 +535,12 @@ p{margin:0}
 @keyframes xph{0%{transform:scale(1)}50%{transform:scale(.94)}100%{transform:scale(1)}}
 @media (min-width:960px){.xpick{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){.xcard.pop .xck,.xcard.pop .xph{animation:none}}
+/* Trabajos con link a Instagram */
+.work.iglink{position:relative;text-decoration:none;color:inherit}
+.work.iglink .ph{transition:transform .35s cubic-bezier(.22,.9,.24,1),filter .35s ease}
+.work.iglink:active .ph{transform:scale(.97)}
+@media (hover:hover){.work.iglink:hover .ph{transform:scale(1.02);filter:brightness(1.05)}}
+.work .igbadge{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(20,22,12,.45);color:#fff;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 /* ===== Computadora ===== */
 @media (min-width:960px){
   body{font-size:16px}
@@ -1202,15 +1208,19 @@ function planPerks(p){
     [p.prio, `Prioridad de turno: reservás con ${db.cfg.horizonSocio} días`],
     [p.excl, "Horarios exclusivos los sábados"],
     [p.aliados, "Descuentos en locales aliados (próximamente)"],
+    ...(p.extra||[]).filter(t=>String(t).trim()).map(t=>[true, esc(t)]),
     [false, "Los cortes no son acumulables"]
-  ].filter(([ok,t],i)=> ok || i===5);
+  ].filter(([ok,t])=> ok || t==="Los cortes no son acumulables");
 }
+const CLUBFEATS0 = ["Prioridad de turno","Horarios exclusivos","Hasta 15% en productos"];
+const clubFeatsRaw = () => Array.isArray(db.cfg.clubFeats) ? db.cfg.clubFeats : [...CLUBFEATS0];
+const clubFeats = () => clubFeatsRaw().filter(t=>String(t).trim());
 function clubEntry(c){
   const active = planActive(c); const minP = Math.min(...db.plans.map(p=>p.price)); const maxS = Math.max(...db.plans.map(planSave));
   return `<button class="clubcard" data-go="club" aria-label="Ir al ${esc(BR().club)}">
     <div class="row" style="align-items:flex-start"><span class="crest">${ico("crown",24)}</span><span class="badge glass">${active?"Sos socio":"Plan mensual"}</span></div>
     <div><p class="hl" style="font-size:28px">${esc(BR().club)}</p><p class="muted sm" style="margin-top:4px">${active?`Te quedan ${c.plan.left} cortes · vence el ${fmtShort(c.plan.end)}`:`Cortes todo el mes desde ${money(minP)}. Ahorrás hasta ${money(maxS)}.`}</p></div>
-    <div class="feats"><span class="badge glass">Prioridad de turno</span><span class="badge glass">Horarios exclusivos</span><span class="badge glass">Hasta 15% en productos</span></div>
+    ${clubFeats().length?`<div class="feats">${clubFeats().map(t=>`<span class="badge glass">${esc(t)}</span>`).join("")}</div>`:""}
     <div class="go"><span>${active?"Ver mi membresía":"Conocer el Club"}</span><span class="arrow">${ico("right",18,2.4)}</span></div>
   </button>`;
 }
@@ -1374,7 +1384,7 @@ function vHome(){
 
   <section class="stack">
     <div class="sechead"><h2>Trabajos recientes</h2>${db.cfg.instagram?`<a class="link" href="${esc(db.cfg.instagram)}" target="_blank" rel="noopener">${ico("ig",15)} Instagram</a>`:""}</div>
-    <div class="works">${BR().works.map(({t,k})=>`<div class="work">${ph("scissors",t,"",k)}<b>${esc(t)}</b></div>`).join("")}</div>
+    <div class="works">${BR().works.map(({t,k,u})=>{ const href = u || db.cfg.instagram; return href ? `<a class="work iglink" href="${esc(href)}" target="_blank" rel="noopener">${ph("scissors",t,"",k)}<span class="igbadge">${ico("ig",14,2)}</span><b>${esc(t)}</b></a>` : `<div class="work">${ph("scissors",t,"",k)}<b>${esc(t)}</b></div>`; }).join("")}</div>
   </section>
   <footer class="foot"><p>${ico("pin",14)} ${esc(db.cfg.direccion)} · ${hoursText()}</p></footer>`;
 }
@@ -2051,7 +2061,9 @@ function sMarca(){
     <p class="xs muted">Vienen fotos de ejemplo. Reemplazalas por las tuyas cuando quieras.</p>
     <div class="phgrid">${photoTile("banner","Portada del inicio",true)}${photoTile("local","Portada de reservas",true)}</div>
     <p class="sm" style="font-weight:700">Trabajos recientes</p>
-    <div class="phgrid">${b.works.map((w,i)=>`<div class="stack" style="gap:6px">${photoTile(w.k,"Trabajo "+(i+1))}<input class="mini" data-work="${i}" value="${esc(w.t)}" aria-label="Título del trabajo ${i+1}"></div>`).join("")}</div>
+    <div class="phgrid">${b.works.map((w,i)=>`<div class="stack" style="gap:6px">${photoTile(w.k,"Trabajo "+(i+1))}<input class="mini" data-work="${i}" value="${esc(w.t)}" aria-label="Título del trabajo ${i+1}"><input class="mini" data-workurl="${i}" value="${esc(w.u||"")}" placeholder="Link del post de Instagram" aria-label="Link de Instagram del trabajo ${i+1}">${b.works.length>1?`<button class="link mutedlink xs" style="justify-self:start" data-workdel="${i}">${ico("x",13,2.2)} Quitar</button>`:""}</div>`).join("")}</div>
+    <button class="btn soft sm" style="justify-self:start" data-workadd>${ico("plus",14)} Agregar trabajo</button>
+    <p class="xs muted">En Instagram, en el post: ··· → Copiar enlace, y pegalo acá. Si lo dejás vacío, la foto lleva a tu perfil.</p>
     <p class="xs muted">Las fotos de servicios y del equipo se cambian en sus secciones.</p>
   </div>`;
 }
@@ -2122,9 +2134,15 @@ function sClub(){
       ${toggle(`plans.${p.id}.prio`, p.prio, "Prioridad de turno", `Reserva con ${db.cfg.horizonSocio} días de anticipación`)}
       ${toggle(`plans.${p.id}.excl`, p.excl, "Horarios exclusivos", "Sábados de 10 a 12")}
       ${toggle(`plans.${p.id}.aliados`, p.aliados, "Locales aliados", "Se muestra como “próximamente”")}
+      <div class="stack" style="gap:8px"><span class="xs muted">Beneficios propios de este plan</span>
+        ${(p.extra||[]).map((t,k)=>`<div class="row" style="gap:8px"><input class="mini" style="flex:1" data-pextra="${p.id}|${k}" value="${esc(t)}" placeholder="Ej: Bebida de cortesía en cada visita" aria-label="Beneficio"><button class="link mutedlink" data-pextradel="${p.id}|${k}" aria-label="Quitar beneficio">${ico("x",15,2.2)}</button></div>`).join("")}
+        <button class="btn soft sm" style="justify-self:start" data-pextraadd="${p.id}">${ico("plus",14)} Agregar beneficio</button></div>
       <div class="row"><span></span>${db.plans.length>1?(pending==="pdel"+p.id?`<span class="actions"><button class="btn sm" data-pdel-ok="${p.id}">Sí, quitar</button><button class="btn ghost sm" data-undo>No</button></span>`:`<button class="link mutedlink" data-pdel="${p.id}">${ico("x",14,2.2)} Quitar plan</button>`):""}</div>
     </div>`; }).join("")}</div>
   <button class="addcard" data-padd>${ico("plus",22,2.2)}<b>Agregar plan</b></button>
+  <div class="card"><p class="lbl">Lo que se destaca del ${esc(b.club)}</p><p class="xs muted">Aparece en la tarjeta del Club en Inicio. Poné lo que quieras.</p>
+    ${clubFeatsRaw().map((t,k)=>`<div class="row" style="gap:8px"><input class="mini" style="flex:1" data-feat="${k}" value="${esc(t)}" aria-label="Destacado"><button class="link mutedlink" data-featdel="${k}" aria-label="Quitar">${ico("x",15,2.2)}</button></div>`).join("")}
+    <button class="btn soft sm" style="justify-self:start" data-featadd>${ico("plus",14)} Agregar destacado</button></div>
   <div class="card"><p class="lbl">${esc(b.card)}</p>
     ${vcard({ name:"Juan Pérez", sellos:Math.min(cardMax(), (tiers()[1]?.at||5)+1), total:(tiers()[1]?.at||5)+1, prefs:{claimed:[tiers()[0]?.id]}, since:today() })}
     <p class="sm muted">Cada corte completado suma un sello. La tarjeta se desbloquea por niveles; al entregar todos los beneficios arranca una nueva. El nivel queda como distintivo del cliente.</p>
@@ -2231,6 +2249,12 @@ function settingsClick(d){
     if (!days.length){ toast("Tiene que atender al menos un día"); return true; }
     b.days = days.sort(); render(); saveSoon(); return true; }
   if ("svcadd" in d){ const id = "s"+Date.now().toString(36); db.services.push({ id, name:"Nuevo servicio", desc:"", price:0, dur:45, icon:"scissors", rating:5 }); render(); saveSoon(); focusEdit(`services.${id}.name`); return true; }
+  if (d.pextraadd){ const p = db.plans.find(x=>x.id===d.pextraadd); if (p){ p.extra = [...(p.extra||[]), ""]; render(); setTimeout(()=>{ const i = document.querySelector(`[data-pextra="${p.id}|${p.extra.length-1}"]`); if (i){ i.focus(); i.scrollIntoView({block:"center",behavior:"smooth"}); } },60); } return true; }
+  if (d.pextradel){ const [pid,k] = d.pextradel.split("|"); const p = db.plans.find(x=>x.id===pid); if (p){ p.extra = (p.extra||[]).filter((_,i)=>i!==Number(k)); render(); saveSoon(); } return true; }
+  if ("featadd" in d){ db.cfg.clubFeats = [...clubFeatsRaw(), ""]; render(); setTimeout(()=>{ const i = document.querySelector(`[data-feat="${db.cfg.clubFeats.length-1}"]`); if (i){ i.focus(); } },60); return true; }
+  if (d.featdel!==undefined && d.featdel!==""){ db.cfg.clubFeats = clubFeatsRaw().filter((_,i)=>i!==Number(d.featdel)); render(); saveSoon(); return true; }
+  if ("workadd" in d){ setBrand("works", [...BR().works.map(x=>({...x})), { k:"w"+Date.now().toString(36), t:"Nuevo trabajo", u:"" }]); render(); saveSoon(); return true; }
+  if (d.workdel!==undefined && d.workdel!==""){ setBrand("works", BR().works.filter((_,i)=>i!==Number(d.workdel))); render(); saveSoon(); return true; }
   if ("aadd" in d){ if (!areas().length) db.areas = [{ id:"principal", name:BR().kind||"Principal", icon:"scissors", kind:"turnos" }];
     const id = "a"+Date.now().toString(36); db.areas.push({ id, name:"Nueva área", icon:"spa", kind:"turnos", title:"", sub:"" }); render(); saveSoon(); focusEdit(`areas.${id}.name`); return true; }
   if (d.adel){ pending = "adel"+d.adel; render(); return true; }
@@ -2262,6 +2286,9 @@ function settingsChange(el){
     else o[f] = String(el.value).trim();
     if (d.edit.startsWith("brand.") || f==="sellosMeta" || f==="premio" || NUMF.includes(f)) { applyBrand(); render(); }
     saveSoon(); return true; }
+  if (d.pextra){ const [pid,k] = d.pextra.split("|"); const p = db.plans.find(x=>x.id===pid); if (p){ p.extra = [...(p.extra||[])]; p.extra[Number(k)] = el.value.trim(); saveSoon(); } return true; }
+  if (d.feat!==undefined && d.feat!==""){ const f = [...clubFeatsRaw()]; f[Number(d.feat)] = el.value.trim(); db.cfg.clubFeats = f; saveSoon(); return true; }
+  if (d.workurl!==undefined){ const w = BR().works.map(x=>({...x})); let u = el.value.trim(); if (u && !/^https?:\/\//i.test(u)) u = "https://" + u; w[Number(d.workurl)].u = u; setBrand("works", w); saveSoon(); return true; }
   if (d.work!==undefined){ const w = BR().works.map(x=>({...x})); w[Number(d.work)].t = el.value.trim(); setBrand("works", w); saveSoon(); return true; }
   if (d.hsel){ const [w, i] = d.hsel.split(".").map(Number); const h = db.cfg.hours[w] || [10,20]; h[i] = Number(el.value);
     if (h[1] <= h[0]){ toast("La hora de cierre tiene que ser después de la apertura"); render(); return true; }
